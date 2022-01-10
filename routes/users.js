@@ -36,6 +36,23 @@ router.put('/:id', verifyTokenAndAuthoriztion, async(req, res)=>{
     }
 })
 
+//UPDATE VIP
+router.put('/updatevip/:id', verifyTokenAndAuthoriztion, async(req, res)=>{
+    try{
+        const updateUser = await User.findById(req.user.id)
+        const codeUser = req.body.code
+        const codeServer = (process.env.CODE_VIP).toString()
+        if(codeUser === codeServer){
+            const up = await updateUser.updateOne({"isVip": true})
+            res.status(200).json(up)
+        }else{
+            res.status(400).json("Code Sai!")
+        }
+    } catch(e){
+        res.status(500).json(e)
+    }
+})
+
 
 //Delete
 router.delete("/:id",verifyTokenAndAuthoriztion, async(req, res)=>{
